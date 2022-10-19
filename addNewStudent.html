@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="marist.png" />
+    <link rel="stylesheet" href="index.css">
+    <title>Add New Student</title>
+</head>
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="index.html">Home</a>
+        <a href="addNewStudent.html"style="color: #ccab00;;">Add New Student</a>
+        <a href="updateStudentDetails.html">Update Student Details</a>
+        <a href="searchStudents.html">Search Students</a>
+        <a href="studentProposals.html">Student Proposals</a>
+        <a href="pastResults.html">Past Results and Proposals</a>
+      </div>
+      
+      
+      <span style="font-size:25px;cursor:pointer;color:white;font-weight: bold;" onclick="openNav()">  <img src="marist.png" alt="Marist Icon" class="maristIcon">
+        <h4 class="admin">ADMIN</h4></span>
+
+    <div id="enterDetails">
+        <h1>Enter Students Details</h1>
+        <form class="form">
+            <h4>First Name</h4>
+            <input id ="enterFirstName" type="text" placeholder="e.g. Kate" minlength="1" required>
+    
+            <h4>Last Name</h4>
+            <input id ="enterLastName" type="text" placeholder="e.g. Hampton" required>
+    
+            <h4>Whanau Group</h4>
+            <input id ="enterWhanauGroup" type="text" placeholder="e.g. VRG" required> 
+            
+            <h4>Students ID Number</h4>
+            <input id ="enterID" type="number" placeholder="e.g 12050" required><br><br> <br> <br>
+    
+            <button id="insert" class="btn btn3">ADD STUDENT</button>
+        </form>
+    </div>
+
+
+    <script type="module">
+
+
+
+
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyB42gccTg_cmomznqZ5yM8fijAtP99y19g",
+    authDomain: "katedatabase-27a27.firebaseapp.com",
+    databaseURL: "https://katedatabase-27a27-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "katedatabase-27a27",
+    storageBucket: "katedatabase-27a27.appspot.com",
+    messagingSenderId: "899786987253",
+    appId: "1:899786987253:web:294de314001591d0f8d7bc"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+//Importing what we need. The code would not work without this. 
+//getDatabase, literally gets the databse. 
+//Set, puts data into the database. 
+//get, gets data from the database. 
+//update, updates the data in the database. 
+//remove, removes data from the databse. 
+//ref, gets a specific reference in the database (put data in with a reference.) Allows for data to be structured.
+//a smaller folder, allows for data to be sorted. 
+
+  import {getDatabase, set, get, update, remove, ref, child}
+  from "https://www.gstatic.com/firebasejs/9.11.0/firebase-database.js";
+ 
+  //calls the database
+        const db = getDatabase();
+
+        //defining all of the variables
+        var enterFirstName= document.querySelector("#enterFirstName");
+        var enterLastName= document.querySelector("#enterLastName");
+        var enterWhanauGroup= document.querySelector("#enterWhanauGroup");
+        var enterID= document.querySelector("#enterID");
+
+        const form = document.querySelector('.form');
+
+        var insertBtn = document.querySelector("#insert");
+
+//Adding the data inputted by the user to database. It would be stored under the parent tag "Student". 
+//Each piece of data stored in the database under "Students" will have a child tag attached to it. This will be whatever the entered ID number is. 
+//If the data is added successfully then it  will give the user an alert to comfirm. It will also give this confirmation in the console.
+//If the data has not been added successfully then the user will get an alert showing that there is an 'error'.
+ form.addEventListener('submit', e=> {
+    e.preventDefault();
+    set(ref(db, "Students/" + enterID.value), {
+               FirstName: enterFirstName.value,
+               LastName: enterLastName.value,
+               WhanauGroup: enterWhanauGroup.value, 
+               ID: enterID.value, 
+           })
+            .then(()=>{
+                alert("Student added to database successfully!")
+                console.log('Student added to database successfully');
+            })
+            .catch(()=>{
+               alert(error)
+                console.log('Error adding students detail to database.');
+           })
+ });
+
+
+
+</script>
+<script src="index.js"></script>
+</body>
+</html>
